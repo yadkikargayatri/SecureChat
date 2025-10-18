@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "XYzu5IVomV+VWJuxJ3H847mlRUYH4TQwhE7QAEiYvX8=",
+  "Source": "SecureChat",
+  "BasePath": "_content/SecureChat",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
