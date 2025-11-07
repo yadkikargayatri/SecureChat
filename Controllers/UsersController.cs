@@ -23,16 +23,26 @@ namespace SecureApp.Controllers
         public async Task<IActionResult> GetUsers()
         {
             // Return only non-sensitive fields
-            var users = await _context.Users
-                .Select(u => new 
-                { 
-                    u.Id,
-                    u.Username,
-                    u.Email
-                })
-                .ToListAsync();
-
-            return Ok(users);
+            try
+            {
+                var users = await _context.Users
+                    .Select(u => new
+                    {
+                        u.Id,
+                        u.Username,
+                        u.Email
+                    })
+                    .ToListAsync();
+                Console.WriteLine("Fetched users: " + users.Count);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching users: " + ex.Message);
+                return StatusCode(500, "Internal server error");
+                
+            }
+            
         }
 
         // GET: api/users/1

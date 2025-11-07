@@ -11,9 +11,11 @@ namespace SecureRTestClient
         {
             // Build the SignalR connection to the chat hub
             var connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:5233/chathub") // Change to your hub URL if needed
+                .WithUrl("http://localhost:5234/chathub") // Change to your hub URL if needed
                 .WithAutomaticReconnect()
                 .Build();
+            
+            Console.WriteLine("Built SignalR connection.");
 
             // Listen for incoming messages from the hub
             connection.On<string, string, string>("ReceiveMessage", (sender, receiver, message) =>

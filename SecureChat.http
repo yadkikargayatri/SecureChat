@@ -1,4 +1,4 @@
-@SecureChat_HostAddress = http://localhost:5233
+@SecureChat_HostAddress = http://localhost:5234
 
 GET {{SecureChat_HostAddress}}/weatherforecast/
 Accept: application/json

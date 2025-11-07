@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SignalRTestClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2420aaf4971320e5c9c4fba2c93847d8355d57ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27f9e1d4043276451fe08ba13ecdd0fc1a27b33b")]
 [assembly: System.Reflection.AssemblyProductAttribute("SignalRTestClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SignalRTestClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

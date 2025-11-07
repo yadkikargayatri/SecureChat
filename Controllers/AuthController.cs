@@ -74,7 +74,7 @@ namespace SecureApp.Controllers
                     new Claim(ClaimTypes.Name, user.Username)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:DurationInMinutes"])),
-                Issuer = _configuration["Jwt:Isuuer"],
+                Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
