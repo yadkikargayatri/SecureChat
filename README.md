@@ -1,18 +1,18 @@
 # 🔒 SecureChat API
 
-SecureChat is a secure real-time chat backend built with **ASP.NET Core 8** using **JWT authentication** and **Entity Framework Core**.  
-It allows users to register, log in, and exchange encrypted chat messages safely.
+**SecureChat** is a secure real-time chat backend built with **ASP.NET Core 8**, designed and developed by **Gayatri Yadkikar**.  
+The project implements **JWT authentication**, **role-based authorization**, and **SignalR integration** for real-time communication.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Highlights
 
-- ✅ User registration & login with JWT authentication  
-- 🔐 Role-based access for authorized endpoints  
-- 💬 Secure chat message storage using SQLite  
-- ⚙️ RESTful API architecture  
-- 🧠 Built with best practices for clean architecture and scalability  
-- 🧪 Swagger UI integration for easy testing  
+- 🔐 Implemented full **JWT Authentication and Authorization** from scratch.  
+- 🧩 Debugged and resolved **401 Unauthorized** issues by properly configuring token validation and middleware order.  
+- 🗃️ Integrated **Entity Framework Core** with **SQLite** for persistent message and user data storage.  
+- 💬 Added **SignalR hub** for real-time messaging support.  
+- 🧪 Integrated **Swagger** with Bearer Token Authentication for testing APIs securely.  
+- ⚙️ Designed for scalability, modularity, and clean architecture.
 
 ---
 
@@ -21,9 +21,12 @@ It allows users to register, log in, and exchange encrypted chat messages safely
 | Layer | Technology |
 |-------|-------------|
 | Backend | ASP.NET Core 8, C# |
-| Authentication | JWT (JSON Web Token) |
 | Database | SQLite (Entity Framework Core) |
-| API Docs | Swagger |
+| Authentication | JWT (JSON Web Token) |
+| Real-Time Communication | SignalR |
+| Documentation | Swagger |
+| Security | BCrypt password hashing |
+
 ---
 
 ## ⚙️ Setup Instructions
