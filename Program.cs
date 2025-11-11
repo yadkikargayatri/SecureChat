@@ -7,11 +7,14 @@ using Microsoft.Extensions.Options;
 using BCrypt.Net;
 using SecureChat.Hubs;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IUserIdProvider, NameIdentifierUserIdProvider>();
+
 //builder.Services.AddDbContext<AppDbContext>(options =>
     //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

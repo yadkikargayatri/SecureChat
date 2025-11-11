@@ -1,9 +1,17 @@
 using Microsoft.AspNetCore.SignalR;
+using SecureChat.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SecureChat.Hubs
 {
     public class ChatHub : Hub
     {
+         private readonly AppDbContext _context;
+
+    public ChatHub(AppDbContext context)
+    {
+        _context = context;
+    }
         // Keep track of connected users: userId -> connectionId
         private static readonly Dictionary<string, string> ConnectedUsers = new();// maps user IDs tp SignalR connection IDs
 
@@ -38,16 +46,34 @@ namespace SecureChat.Hubs
             if (string.IsNullOrEmpty(senderId))
                 return;
 
-            // Save message to database if needed (optional)
+            // Optionally get sender username
+            string senderUsername = Context.User?.Identity?.Name ?? senderId;
 
             // Send message to receiver if connected
             if (ConnectedUsers.TryGetValue(receiverId, out var connectionId))
-            {
-                await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId, message);
-            }
+{
+             await Clients.Client(connectionId)
+            .SendAsync("ReceiveMessage", senderUsername, message);
+        }
 
-            // Optionally, send message back to sender for confirmation
-            await Clients.Caller.SendAsync("ReceiveMessage", senderId, message);
+    // Echo to sender
+        await Clients.Caller
+        .SendAsync("ReceiveMessage", senderUsername, message);
+        }
+
+            // var senderId = Context.UserIdentifier;
+            // if (string.IsNullOrEmpty(senderId))
+            //     return;
+
+            // // Save message to database if needed (optional)
+
+            // // Send message to receiver if connected
+            // if (ConnectedUsers.TryGetValue(receiverId, out var connectionId))
+            // {
+            //     await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId, message);
+            // }
+
+            // // Optionally, send message back to sender for confirmation
+            // await Clients.Caller.SendAsync("ReceiveMessage", senderId, message);
         }
     }
-}
