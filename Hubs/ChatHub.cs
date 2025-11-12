@@ -1,17 +1,20 @@
 using Microsoft.AspNetCore.SignalR;
 using SecureChat.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SecureChat.Hubs
 {
+[Authorize]
     public class ChatHub : Hub
     {
-         private readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
-    public ChatHub(AppDbContext context)
-    {
-        _context = context;
-    }
+        public ChatHub(AppDbContext context)
+        {
+            _context = context;
+        }
         // Keep track of connected users: userId -> connectionId
         private static readonly Dictionary<string, string> ConnectedUsers = new();// maps user IDs tp SignalR connection IDs
 
@@ -41,25 +44,42 @@ namespace SecureChat.Hubs
 
         // Send a message to a specific user
         public async Task SendMessage(string receiverId, string message)
+
         {
-            var senderId = Context.UserIdentifier;
-            if (string.IsNullOrEmpty(senderId))
+            var senderName = Context.User?.Identity?.Name ?? "Unknown";
+            if(string.IsNullOrWhiteSpace(receiverId) || string.IsNullOrWhiteSpace(message))
+            {
                 return;
+            }
+            // var senderId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // var senderName = Context.User?.Identity?.Name ?? "Unknown";
 
-            // Optionally get sender username
-            string senderUsername = Context.User?.Identity?.Name ?? senderId;
+            // if (receiverId == null || message == null)
+            //     return;
 
-            // Send message to receiver if connected
-            if (ConnectedUsers.TryGetValue(receiverId, out var connectionId))
-{
-             await Clients.Client(connectionId)
-            .SendAsync("ReceiveMessage", senderUsername, message);
+            // Send message to the specific user
+            await Clients.User(receiverId).SendAsync("ReceiveMessage", senderName, message);
+
+            await Clients.Caller.SendAsync("ReceiveMessage", senderName, message);
+        }
+        //     var senderId = Context.UserIdentifier;
+        //     if (string.IsNullOrEmpty(senderId))
+        //         return;
+
+        //     // Optionally get sender username
+        //     string senderUsername = Context.User?.Identity?.Name ?? senderId;
+
+        //     // Send message to receiver if connected
+        //     if (ConnectedUsers.TryGetValue(receiverId, out var connectionId))
+        // {
+        //      await Clients.Client(connectionId)
+        //     .SendAsync("ReceiveMessage", senderUsername, message);
         }
 
-    // Echo to sender
-        await Clients.Caller
-        .SendAsync("ReceiveMessage", senderUsername, message);
-        }
+    // // Echo to sender
+    //     await Clients.Caller
+    //     .SendAsync("ReceiveMessage", senderUsername, message);
+    // }
 
             // var senderId = Context.UserIdentifier;
             // if (string.IsNullOrEmpty(senderId))
@@ -76,4 +96,4 @@ namespace SecureChat.Hubs
             // // Optionally, send message back to sender for confirmation
             // await Clients.Caller.SendAsync("ReceiveMessage", senderId, message);
         }
-    }
+    
