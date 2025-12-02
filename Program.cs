@@ -8,10 +8,16 @@ using BCrypt.Net;
 using SecureChat.Hubs;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SignalR;
+using SecureChat.Services;
+using SecureApp.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// Add services
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, NameIdentifierUserIdProvider>();
 

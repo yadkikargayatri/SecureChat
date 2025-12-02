@@ -3,6 +3,7 @@ using SecureChat.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using SecureApp.Model;
 
 namespace SecureChat.Hubs
 {
@@ -46,54 +47,44 @@ namespace SecureChat.Hubs
         public async Task SendMessage(string receiverId, string message)
 
         {
+            var senderId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var senderName = Context.User?.Identity?.Name ?? "Unknown";
-            if(string.IsNullOrWhiteSpace(receiverId) || string.IsNullOrWhiteSpace(message))
+
+            if (string.IsNullOrWhiteSpace(senderId) ||
+                string.IsNullOrWhiteSpace(receiverId) ||
+                string.IsNullOrWhiteSpace(message))
+                return;
+
+            // 1️⃣ Convert string IDs → int IDs (your DB uses int)
+            if (!int.TryParse(senderId, out int senderIntId) ||
+                !int.TryParse(receiverId, out int receiverIntId))
             {
+                await Clients.Caller.SendAsync("ReceiveMessage", "System", "Invalid user ID");
                 return;
             }
-            // var senderId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            // var senderName = Context.User?.Identity?.Name ?? "Unknown";
 
-            // if (receiverId == null || message == null)
-            //     return;
+            // 2️⃣ Save message to database
+            var msgEntity = new Message
+            {
+                SenderId = senderIntId,
+                ReceiverId = receiverIntId,
+                Content = message,
+                Timestamp = DateTime.UtcNow
+            };
 
-            // Send message to the specific user
-            await Clients.User(receiverId).SendAsync("ReceiveMessage", senderName, message);
+            _context.Messages.Add(msgEntity);
+            await _context.SaveChangesAsync();
 
-            await Clients.Caller.SendAsync("ReceiveMessage", senderName, message);
-        }
-        //     var senderId = Context.UserIdentifier;
-        //     if (string.IsNullOrEmpty(senderId))
-        //         return;
+            // 3️⃣ Send to receiver (real-time)
+            await Clients.User(receiverId)
+                .SendAsync("ReceiveMessage", senderName, message);
 
-        //     // Optionally get sender username
-        //     string senderUsername = Context.User?.Identity?.Name ?? senderId;
-
-        //     // Send message to receiver if connected
-        //     if (ConnectedUsers.TryGetValue(receiverId, out var connectionId))
-        // {
-        //      await Clients.Client(connectionId)
-        //     .SendAsync("ReceiveMessage", senderUsername, message);
+            // 4️⃣ Optional: echo back to sender (for UI)
+            await Clients.Caller
+                .SendAsync("MessageSentConfirmation", msgEntity.Id);
         }
 
-    // // Echo to sender
-    //     await Clients.Caller
-    //     .SendAsync("ReceiveMessage", senderUsername, message);
-    // }
-
-            // var senderId = Context.UserIdentifier;
-            // if (string.IsNullOrEmpty(senderId))
-            //     return;
-
-            // // Save message to database if needed (optional)
-
-            // // Send message to receiver if connected
-            // if (ConnectedUsers.TryGetValue(receiverId, out var connectionId))
-            // {
-            //     await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId, message);
-            // }
-
-            // // Optionally, send message back to sender for confirmation
-            // await Clients.Caller.SendAsync("ReceiveMessage", senderId, message);
-        }
+    }
+       
+}
     

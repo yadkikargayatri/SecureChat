@@ -1,3 +1,9 @@
+/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.csproj.AssemblyReference.cache
+/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.GeneratedMSBuildEditorConfig.editorconfig
+/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.csproj.CoreCompileInputs.cache
+/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.MvcApplicationPartsAssemblyInfo.cs
+/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.MvcApplicationPartsAssemblyInfo.cache
+/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.sourcelink.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/appsettings.Development.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/appsettings.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SignalRTestClient/bin/Debug/net8.0/SignalRTestClient.deps.json
@@ -161,12 +167,6 @@
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/runtimes/win-x64/native/e_sqlite3.dll
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/runtimes/win-x86/native/e_sqlite3.dll
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
-/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.csproj.AssemblyReference.cache
-/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.GeneratedMSBuildEditorConfig.editorconfig
-/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.csproj.CoreCompileInputs.cache
-/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.MvcApplicationPartsAssemblyInfo.cs
-/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.MvcApplicationPartsAssemblyInfo.cache
-/Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/SecureChat.sourcelink.json
 /Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/staticwebassets.build.json
 /Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/staticwebassets.development.json
 /Users/gayatriyadkikar/SecureChat/obj/Debug/net8.0/staticwebassets/msbuild.SecureChat.Microsoft.AspNetCore.StaticWebAssets.props

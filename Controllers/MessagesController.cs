@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecureApp.Model;
 using SecureChat.Data;
+using SecureChat.Model.DTOs;
+using SecureChat.Services;
 using System.Security.Claims;
+
 
 namespace SecureApp.Controllers
 {
@@ -12,11 +15,23 @@ namespace SecureApp.Controllers
     [Authorize] // <-- This protects all endpoints
     public class MessagesController : ControllerBase
     {
+        private readonly IMessageService _service;
         private readonly AppDbContext _context;
+        private readonly IMessageService _messageService;
 
-        public MessagesController(AppDbContext context)
+        public MessagesController(IMessageService service, AppDbContext context, IMessageService messageService)
         {
+            _service = service;
             _context = context;
+            _messageService = messageService;
+        }
+
+        // GET: api/messages/history?user1={user1Id}&user2={user2Id}
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory(int user1Id, int user2Id)
+        {
+            var history = await _service.GetMessageHistoryAsync(user1Id, user2Id);
+            return Ok(history);
         }
 
         // GET: api/messages
@@ -66,11 +81,24 @@ namespace SecureApp.Controllers
                 ReceiverId = message.ReceiverId
             });
         }
+
+        [HttpPost("send")]
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageDto dto)
+        {
+            var result = await _messageService.SendMessageAsync(dto);
+            return Ok(result);
+        }
+
     }
+    // public interface IMessageService
+    // {
+    //     Task<IEnumerable<Message>> GetMessageHistoryAsync(int user1Id, int user2Id);
+    // }
 
     public class CreateMessageDto
     {
         public int ReceiverId { get; set; }
         public string Content { get; set; } = null!;
     }
+
 }

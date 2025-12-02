@@ -87,7 +87,13 @@ partial class Program
 
         connection.On<string, string>("ReceiveMessage", (senderName, message) =>
         {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"📩 Message from {senderName}: {message}");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.Write("Enter receiver ID: ");
+
         });
 
         try
@@ -103,23 +109,31 @@ partial class Program
 
         while (true)
         {
-            Console.Write("Enter receiver ID: ");
-            var receiverId = Console.ReadLine() ?? "";
-
-            Console.Write("Enter message: ");
-            var msg = Console.ReadLine() ?? "";
-
-            if (string.IsNullOrWhiteSpace(receiverId) || string.IsNullOrWhiteSpace(msg))
-                continue;
-
-            try
+            while (true)
             {
-                await connection.InvokeAsync("SendMessage", receiverId, msg);
+                Console.WriteLine(); // ensures new line separation
+                Console.Write("Enter receiver ID: ");
+                var receiverId = Console.ReadLine() ?? "";
+
+                Console.Write("Enter message: ");
+                var msg = Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(receiverId) || string.IsNullOrWhiteSpace(msg))
+                    continue;
+
+                try
+                {
+                    await connection.InvokeAsync("SendMessage", receiverId, msg);
+                    Console.WriteLine("✅ Message sent!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️ Error sending message: {ex.Message}");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"⚠️ Error sending message: {ex.Message}");
-            }
+
+
         }
     }
 }
+

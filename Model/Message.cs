@@ -18,4 +18,4 @@ namespace SecureApp.Model
     [JsonIgnore]
     public User? Receiver { get; set; } // nullable
     }
- }
+}
