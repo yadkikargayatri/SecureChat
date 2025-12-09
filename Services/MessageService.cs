@@ -4,6 +4,9 @@ using SecureApp.Controllers;
 using SecureApp.Model;
 using SecureChat.Data;
 using SecureChat.Model.DTOs;
+using Microsoft.AspNetCore.SignalR;
+using SecureChat.Hubs;
+
 
 
 namespace SecureChat.Services
@@ -11,10 +14,12 @@ namespace SecureChat.Services
     public class MessageService : IMessageService
     {
         private readonly AppDbContext _context;
+        private readonly IHubContext<ChatHub> _hub;
 
-        public MessageService(AppDbContext context)
+        public MessageService(AppDbContext context, IHubContext<ChatHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
        public async Task<IEnumerable<Message>> GetMessageHistoryAsync(int user1Id, int user2Id)
@@ -40,6 +45,15 @@ namespace SecureChat.Services
 
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
+
+            await _hub.Clients.User(dto.ReceiverId.ToString())
+                .SendAsync("ReceiveMessage", new
+                {
+                    message.SenderId,
+                    message.ReceiverId,
+                    message.Timestamp,
+                    message.Content
+                });
 
             return message;
         }
