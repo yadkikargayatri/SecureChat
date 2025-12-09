@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using SecureApp.Model;
 using SecureChat.Data;
 using SecureChat.Model.DTOs;
@@ -17,13 +18,13 @@ namespace SecureApp.Controllers
     {
         private readonly IMessageService _service;
         private readonly AppDbContext _context;
-        private readonly IMessageService _messageService;
+        //private readonly IMessageService _messageService;
 
         public MessagesController(IMessageService service, AppDbContext context, IMessageService messageService)
         {
             _service = service;
             _context = context;
-            _messageService = messageService;
+            //_messageService = messageService;
         }
 
         // GET: api/messages/history?user1={user1Id}&user2={user2Id}
@@ -85,8 +86,18 @@ namespace SecureApp.Controllers
         [HttpPost("send")]
         public async Task<IActionResult> SendMessage([FromBody] SendMessageDto dto)
         {
-            var result = await _messageService.SendMessageAsync(dto);
-            return Ok(result);
+            var senderId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            dto.SenderId = senderId;
+            
+            var message = await _service.SendMessageAsync(dto);
+            return Ok(new
+            {
+                message.Id,
+                message.Content,
+                message.Timestamp,
+                message.SenderId,
+                message.ReceiverId
+            });
         }
 
     }
