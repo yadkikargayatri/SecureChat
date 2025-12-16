@@ -84,6 +84,32 @@ namespace SecureChat.Hubs
                 .SendAsync("MessageSentConfirmation", msgEntity.Id);
         }
 
+        // typing indicator :client calls this when user types
+        public async Task Typing(string receiverId)
+        {
+            var senderName = Context.User?.Identity?.Name ?? "Unknown";
+
+            if (string.IsNullOrWhiteSpace(receiverId))
+                return;
+
+            // Notify the receiver that the sender is typing
+            await Clients.User(receiverId)
+                .SendAsync("UserTyping", senderName);
+        }
+
+        //Optional : stopped typing event/indicator
+        public async Task StopTyping(string receiverId)
+        {
+            var senderName = Context.User?.Identity?.Name ?? "Unknown";
+
+            if (string.IsNullOrWhiteSpace(receiverId))
+                return;
+
+            // Notify the receiver that the sender has stopped typing
+            await Clients.User(receiverId)
+                .SendAsync("UserStoppedTyping", senderName);
+        }
+
     }
        
 }

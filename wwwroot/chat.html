@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SecureChat - Web UI</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.7/signalr.min.js"></script>
+  <style>
+    body{font-family:Segoe UI, sans-serif}
+    #messages{height:300px; overflow:auto; border:1px solid #ccc; padding:10px}
+    .mine{color:green}
+    .theirs{color:blue}
+  </style>
+</head>
+<body>
+  <h3>SecureChat (Web)</h3>
+  <label>JWT: <input id="token" style="width:60%"/></label><button id="connect">Connect</button>
+  <div id="status"></div>
+  <div id="messages"></div>
+
+  <input id="to" placeholder="Receiver ID" />
+  <input id="text" placeholder="Message" style="width:50%"/>
+  <button id="send">Send</button>
+
+  <script>
+    let connection;
+    document.getElementById('connect').addEventListener('click', async () => {
+      const token = document.getElementById('token').value;
+      connection = new signalR.HubConnectionBuilder()
+        .withUrl('/chatHub', { accessTokenFactory: () => token })
+        .withAutomaticReconnect()
+        .build();
+
+      connection.on('ReceiveMessage', (sender, message) => {
+        const div = document.getElementById('messages');
+        const el = document.createElement('div');
+        el.className = 'theirs';
+        el.textContent = `${sender}: ${message}`;
+        div.appendChild(el);
+      });
+
+      connection.on('UserTyping', (sender) => {
+        document.getElementById('status').textContent = `${sender} is typing...`;
+        setTimeout(()=>document.getElementById('status').textContent='', 2000);
+      });
+
+      connection.on('UserOnline', (userId) => {
+        const s = document.getElementById('status');
+        s.textContent = `${userId} is online`;
+        setTimeout(()=>s.textContent='', 2000);
+      });
+
+      await connection.start();
+      document.getElementById('status').textContent = 'Connected';
+    });
+
+    document.getElementById('send').addEventListener('click', async () => {
+      const to = document.getElementById('to').value;
+      const text = document.getElementById('text').value;
+      await connection.invoke('SendMessage', to, text);
+      const div = document.getElementById('messages');
+      const me = document.createElement('div');
+      me.className = 'mine';
+      me.textContent = `You: ${text}`;
+      div.appendChild(me);
+      document.getElementById('text').value = '';
+    });
+
+    // typing indicator on keypress
+    document.getElementById('text').addEventListener('input', async () => {
+      const to = document.getElementById('to').value;
+      if (connection && to) {
+        await connection.invoke('Typing', to);
+      }
+    });
+  </script>
+</body>
+</html>

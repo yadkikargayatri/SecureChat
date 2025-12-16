@@ -6,13 +6,13 @@ The project implements **JWT authentication**, **role-based authorization**, and
 ---
 
 ## 🚀 Key Highlights
-
-- 🔐 Implemented full **JWT Authentication and Authorization** from scratch.  
-- 🧩 Debugged and resolved **401 Unauthorized** issues by properly configuring token validation and middleware order.  
-- 🗃️ Integrated **Entity Framework Core** with **SQLite** for persistent message and user data storage.  
-- 💬 Added **SignalR hub** for real-time messaging support.  
-- 🧪 Integrated **Swagger** with Bearer Token Authentication for testing APIs securely.  
-- ⚙️ Designed for scalability, modularity, and clean architecture.
+## Features
+- JWT authentication (register/login)
+- SignalR real-time messaging
+- Message persistence with EF Core (SQLite)
+- Message history API
+- Typing indicators & presence
+- Minimal web UI demo
 
 ---
 
@@ -35,3 +35,27 @@ The project implements **JWT authentication**, **role-based authorization**, and
 ```bash
 git clone https://github.com/<your-username>/SecureChat.git
 cd SecureChat
+
+## Getting started
+1. Update `appsettings.json` connection string and JWT secret.
+2. Apply migrations:
+
+dotnet ef migrations add Init
+dotnet ef database update
+
+3. Run the API:
+
+
+dotnet run --project SecureChat
+
+4. Run CLI client (optional):
+
+
+dotnet run --project SignalRTestClient
+
+5. Open `http://localhost:5234/chat.html` for web demo (enter JWT token).
+
+## Architecture
+- ASP.NET Core WebAPI + SignalR
+- EF Core for persistence
+- Simple console client for demo

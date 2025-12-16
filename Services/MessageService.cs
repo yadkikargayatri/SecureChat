@@ -46,17 +46,24 @@ namespace SecureChat.Services
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            await _hub.Clients.User(dto.ReceiverId.ToString())
-                .SendAsync("ReceiveMessage", new
-                {
-                    message.SenderId,
-                    message.ReceiverId,
-                    message.Timestamp,
-                    message.Content
-                });
+            // await _hub.Clients.User(dto.ReceiverId.ToString())
+            //     .SendAsync("ReceiveMessage", new
+            //     {
+            //         message.SenderId,
+            //         message.ReceiverId,
+            //         message.Timestamp,
+            //         message.Content
+            //     });
+
+            // return message;
+               // Broadcast to receiver in realtime using user identifier
+            await _hub.Clients.User(dto.ReceiverId.ToString()).SendAsync("ReceiveMessage", dto.SenderId.ToString(), dto.Content);
+
+            // Optionally notify sender about success or message id
+            await _hub.Clients.User(dto.SenderId.ToString()).SendAsync("MessageSentConfirmation", message.Id);
 
             return message;
         }
        
-    }
+   }
 }

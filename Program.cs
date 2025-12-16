@@ -13,7 +13,7 @@ using SecureApp.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddSingleton<PresenceService>();
 // Add services
 builder.Services.AddControllers();
 
@@ -112,6 +112,7 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+app.UseStaticFiles();   // for web chat.html
 
 app.MapHub<ChatHub> ("/chatHub");
 app.Run();

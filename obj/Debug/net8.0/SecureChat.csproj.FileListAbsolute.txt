@@ -11,6 +11,7 @@
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SignalRTestClient/obj/Debug/net8.0/SignalRTestClient.sourcelink.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SignalRTestClient/obj/project.assets.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SignalRTestClient/obj/SignalRTestClient.csproj.nuget.dgspec.json
+/Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SecureChat.staticwebassets.runtime.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SecureChat
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SecureChat.deps.json
 /Users/gayatriyadkikar/SecureChat/bin/Debug/net8.0/SecureChat.runtimeconfig.json

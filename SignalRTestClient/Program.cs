@@ -96,6 +96,45 @@ partial class Program
 
         });
 
+        connection.On<string>("UserTyping", senderName =>
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine($"✍️ {senderName} is typing...");
+            Console.ResetColor();
+            //Console.WriteLine();
+            Console.Write("Enter receiver ID: ");
+        });
+
+        connection.On<string>("UserOnline",  (userId) =>
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"🟢 User {userId} is online.");
+            Console.ResetColor();
+            //Console.WriteLine();
+            Console.Write("Enter receiver ID: ");
+        });
+
+        connection.On<string>("UserOffline",  (userId) =>
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine($"⚫ User {userId} is offline.");
+            Console.ResetColor();
+            //Console.WriteLine();
+            Console.Write("Enter receiver ID: ");
+        });
+
+        connection.On<int>("MessageSentConfirmation", (messageId) =>
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"✅ Message sent successfully! Message ID: {messageId}");
+            Console.ResetColor();
+            //Console.WriteLine();
+            Console.Write("Enter receiver ID: ");
+        });
         try
         {
             await connection.StartAsync();
@@ -116,7 +155,12 @@ partial class Program
                 var receiverId = Console.ReadLine() ?? "";
 
                 Console.Write("Enter message: ");
+                await connection.InvokeAsync("Typing", receiverId);
                 var msg = Console.ReadLine() ?? "";
+
+                await connection.InvokeAsync("StopTyping", receiverId);
+
+                await connection.InvokeAsync("SendMessage", receiverId, msg);
 
                 if (string.IsNullOrWhiteSpace(receiverId) || string.IsNullOrWhiteSpace(msg))
                     continue;
@@ -131,9 +175,8 @@ partial class Program
                     Console.WriteLine($"⚠️ Error sending message: {ex.Message}");
                 }
             }
-
-
         }
+
     }
 }
 
